@@ -1,0 +1,9 @@
+{
+  "name": "birthday-mamta",
+  "version": "1.0.0",
+  "description": "Birthday surprise for Mamta",
+  "scripts": {
+    "start": "npx serve public -l 3000",
+    "deploy": "npx netlify-cli deploy --prod --dir public"
+  }
+}
