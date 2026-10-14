@@ -602,12 +602,13 @@
       id="ytContainer"
       style="
         position: fixed;
-        width: 1px;
-        height: 1px;
-        bottom: -9999px;
-        left: -9999px;
-        overflow: hidden;
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 115px;
+        opacity: 0;
         pointer-events: none;
+        z-index: -1;
       "
     >
       <div id="ytPlayer"></div>
@@ -784,8 +785,8 @@
 
       window.onYouTubeIframeAPIReady = function () {
         player = new YT.Player("ytPlayer", {
-          height: "1",
-          width: "1",
+          height: "115",
+          width: "200",
           videoId: SAUDEBAZI_ID,
           playerVars: {
             autoplay: 0,
@@ -797,8 +798,12 @@
             iv_load_policy: 3,
             modestbranding: 1,
             rel: 0,
+            enablejsapi: 1,
           },
           events: {
+            onReady: function (e) {
+              e.target.setVolume(100);
+            },
             onStateChange: function (e) {
               // If video ended unexpectedly, loop it
               if (e.data === YT.PlayerState.ENDED) {
