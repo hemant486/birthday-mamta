@@ -593,14 +593,25 @@
     </div>
 
     <!-- Music button -->
-    <button class="music-btn" id="musicBtn" title="Play music">🎵</button>
+    <button class="music-btn" id="musicBtn" title="Play Saudebazi 🎶">
+      🎵
+    </button>
 
-    <audio id="bgMusic" loop>
-      <source
-        src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-        type="audio/mpeg"
-      />
-    </audio>
+    <!-- Hidden YouTube player for Saudebazi - Javed Ali -->
+    <div
+      id="ytContainer"
+      style="
+        position: fixed;
+        width: 1px;
+        height: 1px;
+        bottom: -9999px;
+        left: -9999px;
+        overflow: hidden;
+        pointer-events: none;
+      "
+    >
+      <div id="ytPlayer"></div>
+    </div>
 
     <script>
       // ── Stars ──────────────────────────────────────────────────────────────────
@@ -758,19 +769,55 @@
         }
       });
 
-      // ── Music ──────────────────────────────────────────────────────────────────
+      // ── Music (YouTube - Saudebazi by Javed Ali) ──────────────────────────────
       const musicBtn = document.getElementById("musicBtn");
-      const bgMusic = document.getElementById("bgMusic");
+      let player = null;
       let playing = false;
+
+      // Load YouTube IFrame API
+      const tag = document.createElement("script");
+      tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+
+      // Saudebazi - Javed Ali | Encore version YouTube ID
+      const SAUDEBAZI_ID = "zFW5V38sEgk";
+
+      window.onYouTubeIframeAPIReady = function () {
+        player = new YT.Player("ytPlayer", {
+          height: "1",
+          width: "1",
+          videoId: SAUDEBAZI_ID,
+          playerVars: {
+            autoplay: 0,
+            loop: 1,
+            playlist: SAUDEBAZI_ID,
+            controls: 0,
+            disablekb: 1,
+            fs: 0,
+            iv_load_policy: 3,
+            modestbranding: 1,
+            rel: 0,
+          },
+          events: {
+            onStateChange: function (e) {
+              if (e.data === YT.PlayerState.ENDED) {
+                player.playVideo();
+              }
+            },
+          },
+        });
+      };
+
       musicBtn.addEventListener("click", function (e) {
         e.stopPropagation();
+        if (!player) return;
         if (!playing) {
-          bgMusic.play().catch(() => {});
+          player.playVideo();
           musicBtn.textContent = "⏸";
           musicBtn.classList.add("playing");
           playing = true;
         } else {
-          bgMusic.pause();
+          player.pauseVideo();
           musicBtn.textContent = "🎵";
           musicBtn.classList.remove("playing");
           playing = false;
