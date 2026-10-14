@@ -597,22 +597,10 @@
       🎵
     </button>
 
-    <!-- Hidden YouTube player for Saudebazi - Javed Ali -->
-    <div
-      id="ytContainer"
-      style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 200px;
-        height: 115px;
-        opacity: 0;
-        pointer-events: none;
-        z-index: -1;
-      "
-    >
-      <div id="ytPlayer"></div>
-    </div>
+    <!-- Saudebazi by Javed Ali — hosted directly -->
+    <audio id="bgMusic" loop preload="auto">
+      <source src="saudebazi.mp3" type="audio/mpeg" />
+    </audio>
 
     <script>
       // ── Stars ──────────────────────────────────────────────────────────────────
@@ -770,59 +758,20 @@
         }
       });
 
-      // ── Music (YouTube - Saudebazi by Javed Ali) ──────────────────────────────
+      // ── Music (Saudebazi by Javed Ali — direct MP3) ───────────────────────────
       const musicBtn = document.getElementById("musicBtn");
-      let player = null;
+      const bgMusic = document.getElementById("bgMusic");
       let playing = false;
-
-      // Load YouTube IFrame API
-      const tag = document.createElement("script");
-      tag.src = "https://www.youtube.com/iframe_api";
-      document.head.appendChild(tag);
-
-      // Saudebazi - Javed Ali | Encore version YouTube ID
-      const SAUDEBAZI_ID = "zFW5V38sEgk";
-
-      window.onYouTubeIframeAPIReady = function () {
-        player = new YT.Player("ytPlayer", {
-          height: "115",
-          width: "200",
-          videoId: SAUDEBAZI_ID,
-          playerVars: {
-            autoplay: 0,
-            loop: 1,
-            playlist: SAUDEBAZI_ID,
-            controls: 0,
-            disablekb: 1,
-            fs: 0,
-            iv_load_policy: 3,
-            modestbranding: 1,
-            rel: 0,
-            enablejsapi: 1,
-          },
-          events: {
-            onReady: function (e) {
-              e.target.setVolume(100);
-            },
-            onStateChange: function (e) {
-              if (e.data === YT.PlayerState.ENDED) {
-                player.playVideo();
-              }
-            },
-          },
-        });
-      };
 
       musicBtn.addEventListener("click", function (e) {
         e.stopPropagation();
-        if (!player) return;
         if (!playing) {
-          player.playVideo();
+          bgMusic.play();
           musicBtn.textContent = "⏸";
           musicBtn.classList.add("playing");
           playing = true;
         } else {
-          player.pauseVideo();
+          bgMusic.pause();
           musicBtn.textContent = "🎵";
           musicBtn.classList.remove("playing");
           playing = false;
